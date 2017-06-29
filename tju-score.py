@@ -7,6 +7,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formataddr
+import urllib
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -22,7 +23,7 @@ receiver = '10000@qq.com'   # 收件人
 ### 编辑上述信息
 
 login_url = 'http://tjis2.tongji.edu.cn:58080/amserver/UI/Login?service=adminconsoleservice&goto=http://tjis2.tongji.edu.cn:58080/amserver/base/AMAdminFrame&&IDToken1=' + \
-    id + '&IDToken2=' + password
+    id + '&IDToken2=' + urllib.quote(password)
 check_url = 'http://xuanke.tongji.edu.cn/pass.jsp'
 grade_url = 'http://xuanke.tongji.edu.cn/tj_login/redirect.jsp?link=/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916$mkid=20051013779901&qxid=20051013779916'
 
@@ -51,6 +52,7 @@ if not('失败' in req2.text):
         for tr in table:
             line = tr.xpath('td/div/font/text()')
             result.append('<td>' + '</td><td>'.join(line[1:4]) + '</td>')
+            result.append('<td>' + line[-1] + '</td>')
 
         a = '<table border="1" rules="all"><tr>' + '</tr><tr>'.join(result) + '</tr></table>'
 
