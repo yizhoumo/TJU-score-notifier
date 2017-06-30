@@ -29,18 +29,26 @@ grade_url = 'http://xuanke.tongji.edu.cn/tj_login/redirect.jsp?link=/tj_xuankexj
 
 # go and get grade!
 session = requests.Session()
-req1 = session.request('GET', login_url)
-req2 = session.request('GET', check_url)
+try:
+	req1 = session.get(login_url, timeout=10)
+	req2 = session.get(check_url, timeout=10)
+except:
+	print('Error: 网络连接失败')
+	exit()
 
 if not('失败' in req2.text):
+	try:
+		req3 = session.get(grade_url, timeout=10)
+	except:
+		print('Error: 网络连接失败')
+		exit()
 
-	req3 = session.request('GET', grade_url)
 	text = req3.text
 	html = etree.HTML(text)
 
 	table = html.xpath('//table[@class="mainTable"]/tr[td/div/font]')
 
-	file = open('tju-score.txt', 'a+')
+	file = open(sys.path[0] + '/tju-score.txt', 'a+')
 	courseList = file.read().split()
 
 	updateList = []
