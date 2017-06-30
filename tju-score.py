@@ -23,7 +23,7 @@ receiver = '10000@qq.com'   # 收件人
 ### 编辑上述信息
 
 login_url = 'http://tjis2.tongji.edu.cn:58080/amserver/UI/Login?service=adminconsoleservice&goto=http://tjis2.tongji.edu.cn:58080/amserver/base/AMAdminFrame&&IDToken1=' + \
-    id + '&IDToken2=' + urllib.quote(password)
+	id + '&IDToken2=' + urllib.quote(password)
 check_url = 'http://xuanke.tongji.edu.cn/pass.jsp'
 grade_url = 'http://xuanke.tongji.edu.cn/tj_login/redirect.jsp?link=/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916$mkid=20051013779901&qxid=20051013779916'
 
@@ -34,43 +34,44 @@ req2 = session.request('GET', check_url)
 
 if not('失败' in req2.text):
 
-    req3 = session.request('GET', grade_url)
-    text = req3.text
-    html = etree.HTML(text)
+	req3 = session.request('GET', grade_url)
+	text = req3.text
+	html = etree.HTML(text)
 
-    table = html.xpath('//table[@class="mainTable"]/tr[td/div/font]')
-    nowCnt = str(len(table))
-    cntFile = open('tju-score.txt', 'r')
-    Cnt = cntFile.read()
-    cntFile.close()
+	table = html.xpath('//table[@class="mainTable"]/tr[td/div/font]')
 
-    if (Cnt != nowCnt):
-        cntFile = open('tju-score.txt', 'w')
-        cntFile.write(nowCnt)
-        cntFile.close()
-        result = []
-        for tr in table:
-            line = tr.xpath('td/div/font/text()')
-            result.append('<td>' + '</td><td>'.join(line[1:4]) + '</td>')
-            result.append('<td>' + line[-1] + '</td>')
+	file = open('tju-score.txt', 'a+')
+	courseList = file.read().split()
 
-        a = '<table border="1" rules="all"><tr>' + '</tr><tr>'.join(result) + '</tr></table>'
+	updateList = []
 
-        message = MIMEText(a, 'html', 'utf-8')
-        message['From'] = formataddr([sender, sender])
-        message['To'] = formataddr([receiver, receiver])
-        message['Subject'] = Header('成绩更新'+nowCnt, 'utf-8')
+	for tr in table:
+		line = tr.xpath('td/div/font/text()')
+		if line[0] in courseList:
+			continue
+		courseList.append(line[0])
+		file.write(line[0] + '\n')
+		updateList.append('<td>' + '</td><td>'.join(line[1:4]) + '</td>')
 
-        try:
-            smtpObj = smtplib.SMTP(mail_host, 25)
-            #smtpObj.set_debuglevel(1)
-            smtpObj.login(mail_user, mail_pass)
-            smtpObj.sendmail(sender, [receiver], message.as_string())
-            print '邮件发送成功'
-        except smtplib.SMTPException:
-            print 'Error: 无法发送邮件'
-    else:
-        print('没有成绩更新')
+	file.close()
 
+	if len(updateList):
+		msgText = '<table border="1" rules="all"><tr>' + '</tr><tr>'.join(updateList) + '</tr></table>'
+
+		message = MIMEText(msgText, 'html', 'utf-8')
+		message['From'] = formataddr([sender, sender])
+		message['To'] = formataddr([receiver, receiver])
+		message['Subject'] = Header('成绩更新'+str(len(courseList)), 'utf-8')
+
+		try:
+			smtpObj = smtplib.SMTP(mail_host, 25)
+			#smtpObj.set_debuglevel(1)
+			smtpObj.login(mail_user, mail_pass)
+			smtpObj.sendmail(sender, [receiver], message.as_string())
+			print '邮件发送成功'
+		except smtplib.SMTPException:
+			print 'Error: 无法发送邮件'
+	else:
+		print('没有成绩更新')
 else:
-    print('Error: 登陆失败!')
+	print('Error: 登陆失败!')
