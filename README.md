@@ -4,7 +4,7 @@ Inspired by [Tongji-GPA](https://github.com/wlh320/Tongji-GPA).
 ## Usage
 Supposing you've modified the script and save it at `/home/rimo/tju-score.py`, simply run it with `python /home/rimo/tju-score.py`. If it failed, install the necessary components.
 
-**Attention**: Do NOT delete `tju-score.txt`, because it tracks the number of updated scores.
+**Attention**: Do NOT delete `tju-score.txt`, because it tracks the ID of updated courses.
 
 Add a schedule by `crontab -e` and add a new line with:
 ```
