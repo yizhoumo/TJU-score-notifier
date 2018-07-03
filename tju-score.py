@@ -53,7 +53,8 @@ try:
     session.post(url_assert, data={'SAMLResponse': SAMLResponse})
 
     url_redirect = 'http://xuanke.tongji.edu.cn/tj_login/redirect.jsp?' +\
-        'link=/tj_xuankexjgl/score/query/student/cjcx.jsp?qxid=20051013779916$mkid=20051013779901'
+        'link=/tj_xuankexjgl/score/query/student/cjcx.jsp?' +\
+        'qxid=20051013779916$mkid=20051013779901&qxid=20051013779916'
     session.get(url_redirect)
 
     url_cjcx = 'http://xuanke.tongji.edu.cn/tj_xuankexjgl/score/query/' +\
@@ -92,7 +93,7 @@ if len(updateList):
     message = MIMEText(msgText, 'html', 'utf-8')
     message['From'] = formataddr([SENDER, SENDER])
     message['To'] = formataddr([RECEIVER, RECEIVER])
-    message['Subject'] = Header('成绩更新{%d}' % len(courseList), 'utf-8')
+    message['Subject'] = Header('成绩更新%d' % len(courseList), 'utf-8')
     try:
         smtpObj = smtplib.SMTP(MAIL_HOST, 25)
         # smtpObj.set_debuglevel(1)
