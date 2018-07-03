@@ -13,9 +13,9 @@ import json
 
 
 # 编辑下列信息
-USER_ID   = '1650000'		# 学号
+USER_ID   = '1650000'       # 学号
 PASSWORD  = 'password'      # 密码
-SEMESTER  = '20172'			# 学期
+SEMESTER  = '20172'         # 学期
 MAIL_HOST = 'smtp.qq.com'   # SMTP服务器
 MAIL_USER = '10000@qq.com'  # 邮箱用户名
 MAIL_PASS = 'mail_pwd'      # 邮箱密码

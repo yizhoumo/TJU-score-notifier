@@ -4,7 +4,7 @@ Inspired by [Tongji-GPA](https://github.com/wlh320/Tongji-GPA).
 ## Usage
 Supposing you've modified the info in the script and save it at `/home/rimo/tju-score.py`, the simple usage is just like `python /home/rimo/tju-score.py`.
 
-**Attention**: DO NOT delete `updated.txt`, because it tracks the ID of updated courses.
+**Attention**: DO NOT delete `updated.json`, because it tracks the ID of updated courses.
 
 You can make a schedule by executing `crontab -e` and adding a new line like:
 ```
